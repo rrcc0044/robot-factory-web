@@ -7,7 +7,7 @@ export interface Props {
 }
 
 function LoadingComponent({ isLoading, error }: Props) {
-  const icon = <Icon type="loading" style={{ fontSize: "5em", color: "#D20F84" }} spin={true} />
+  const icon = <Icon type="loading" style={{ fontSize: "5em" }} spin={true} />
 
   if(isLoading) {
     // Handle loading state
