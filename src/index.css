@@ -1,5 +1,20 @@
+@import '~antd/dist/antd.css';
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+.loading {
+  text-align: center;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  padding: 30px 50px;
+  margin: 20px 0;
+  height: 90vh;
+}
+
+.robot-card-selected {
+  border: 2px solid #9c2121;
 }
