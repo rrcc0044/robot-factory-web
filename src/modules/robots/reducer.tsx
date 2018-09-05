@@ -5,6 +5,7 @@ interface InitialState {
   qaPassedRobots: Array<IRobot>;
   factorySecondsRobots: Array<IRobot>;
   isLoading: boolean;
+  errors: Array<any>;
 }
 
 
@@ -35,6 +36,7 @@ const initialState: InitialState = {
   qaPassedRobots: [],
   factorySecondsRobots: [],
   isLoading: false,
+  errors: [],
 }
 
 export default (state = initialState, action: any) => {
@@ -62,19 +64,7 @@ export default (state = initialState, action: any) => {
         }
       );
 
-    case actionTypes.GET_ROBOTS_REQUEST_FAILED:
-      return Object.assign(
-        {},
-        state,
-        {
-          isLoading: false,
-          error: null,
-          robots: null
-        }
-      );
-
     case actionTypes.PROCESS_ROBOTS_REQUEST_SUCCESS:
-    case actionTypes.PROCESS_ROBOTS_REQUEST_FAILED:
       const robotIds = action.robots.map((obj: any) => obj.id)
       return Object.assign(
         {},
@@ -89,7 +79,6 @@ export default (state = initialState, action: any) => {
       );
 
     case actionTypes.RECYCLE_ROBOTS_REQUEST_SUCCESS:
-    case actionTypes.RECYCLE_ROBOTS_REQUEST_FAILED:
       return Object.assign(
         {},
         state,
@@ -101,7 +90,6 @@ export default (state = initialState, action: any) => {
       );
 
     case actionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST_SUCCESS:
-    case actionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST_FAILED:
       return Object.assign(
         {},
         state,
@@ -118,7 +106,6 @@ export default (state = initialState, action: any) => {
       );
     
     case actionTypes.SHIP_ROBOTS_REQUEST_SUCCESS:
-    case actionTypes.SHIP_ROBOTS_REQUEST_FAILED:
       return Object.assign(
         {},
         state,
@@ -127,6 +114,20 @@ export default (state = initialState, action: any) => {
           error: null,
           qaPassedRobots: state.qaPassedRobots.filter((obj) => !action.robotIds.shipRobots.includes(obj.id)),
           factorySecondsRobots: state.factorySecondsRobots.filter((obj) => !action.robotIds.shipRobots.includes(obj.id)),
+        }
+      );
+
+    case actionTypes.GET_ROBOTS_REQUEST_FAILED:
+    case actionTypes.PROCESS_ROBOTS_REQUEST_FAILED:
+    case actionTypes.RECYCLE_ROBOTS_REQUEST_FAILED:
+    case actionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST_FAILED:
+    case actionTypes.SHIP_ROBOTS_REQUEST_FAILED:
+      return Object.assign(
+        {},
+        state,
+        {
+          isLoading: false,
+          error: action.error
         }
       );
 

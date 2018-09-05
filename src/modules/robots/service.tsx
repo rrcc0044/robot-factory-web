@@ -1,6 +1,6 @@
 import API from '../../utils/api';
 
-export const getRobotsForQA = async () => {
+export const getRobots = async () => {
   try {
     const response = await API.get('/api/v1/robots');
     const json = await response.json();
@@ -16,7 +16,7 @@ export const getRobotsForQA = async () => {
   }
 };
 
-export const postProcessRobots = async (payload: any) => {
+export const processRobots = async (payload: any) => {
   try {
     const response = await API.post('/api/v1/robots/process', payload);
     const json = await response.json();
@@ -31,7 +31,7 @@ export const postProcessRobots = async (payload: any) => {
   }
 }
 
-export const deleteRecycleRobots = async (payload: any) => {
+export const recycleRobot = async (payload: any) => {
   try {
     const response = await API.post('/api/v1/robots/recycle', payload);
 

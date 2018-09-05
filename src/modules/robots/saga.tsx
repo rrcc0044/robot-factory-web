@@ -1,85 +1,93 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { actionTypes as robotActionTypes } from './reducer';
 import { 
-  getRobotsForQA,
-  postProcessRobots,
-  deleteRecycleRobots,
-  extinguishFireFromRobot,
+  getRobots as getRobotsService,
+  processRobots as processRobotsService,
+  recycleRobot as recycleRobotService,
+  extinguishFireFromRobot as extinguishFireFromRobotService,
   shipRobots as shipRobotsService
 }  from './service';
 import { message } from 'antd'
 
 
 function* getRobots(action: any) {
-
   try {
-    const robots = yield call(getRobotsForQA);
+    const robots = yield call(getRobotsService);
 
     yield put({ type: robotActionTypes.GET_ROBOTS_REQUEST_SUCCESS, robots });
   } catch (err) {
     const error = err.message || err;
+
     yield put({ type: robotActionTypes.GET_ROBOTS_REQUEST_FAILED, error });
 
     message.error('Failed to get robots');
   }
 }
 
-function* updateRobots(action: any) {
-  const { robotIds } = action;
-
+function* processRobots(action: any) {
   try {
-    const robots = yield call(postProcessRobots, robotIds);
+
+    const { robotIds } = action;
+    const robots = yield call(processRobotsService, robotIds);
+
     yield put({ type: robotActionTypes.PROCESS_ROBOTS_REQUEST_SUCCESS, robots });
+
     message.success('Successfully processed robots');
   } catch (err) {
-    // const error = err.message || err;
-    yield put({ type: robotActionTypes.PROCESS_ROBOTS_REQUEST_FAILED, robotIds });
+    const error = err.message || err;
+
+    yield put({ type: robotActionTypes.PROCESS_ROBOTS_REQUEST_FAILED, error });
 
     message.error('Failed to process robots');
   }
 }
 
-function* deleteRobots(action: any) {
-  const { robotIds } = action;
-
+function* recycleRobots(action: any) {
   try {
-    yield call(deleteRecycleRobots, robotIds);
-    yield put({ type: robotActionTypes.RECYCLE_ROBOTS_REQUEST_SUCCESS, robotIds });
-    message.success('Successfully recycled robots');
+    const { robotIds } = action;
 
+    yield call(recycleRobotService, robotIds);
+    yield put({ type: robotActionTypes.RECYCLE_ROBOTS_REQUEST_SUCCESS, robotIds });
+
+    message.success('Successfully recycled robots');
   } catch (err) {
-    // const error = err.message || err;
-    yield put({ type: robotActionTypes.RECYCLE_ROBOTS_REQUEST_FAILED, robotIds });
+    const error = err.message || err;
+
+    yield put({ type: robotActionTypes.RECYCLE_ROBOTS_REQUEST_FAILED, error });
 
     message.error('Failed to recycled robots');
   }
 }
 
-function* extinguishFireRobots(action: any) {
+function* extinguishFireFromRobot(action: any) {
   try {
     const { robot } = action;
-
-    const updatedRobot = yield call(extinguishFireFromRobot, robot);
+    const updatedRobot = yield call(extinguishFireFromRobotService, robot);
 
     yield put({ type: robotActionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST_SUCCESS, updatedRobot });
+
+    message.success('Successfully extinguished fire from robot');
   } catch (err) {
     const error = err.message || err;
+
     yield put({ type: robotActionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST_FAILED, error });
 
-    message.error('Failed to get robots');
+    message.error('Failed to extinguish fire from robot');
   }
 }
 
 function* shipRobots(action: any) {
-  const { robotIds } = action;
-
   try {
+    const { robotIds } = action;
+
     yield call(shipRobotsService, robotIds);
     yield put({ type: robotActionTypes.SHIP_ROBOTS_REQUEST_SUCCESS, robotIds });
+
     message.success('Successfully shipped robots');
 
   } catch (err) {
     const error = err.message || err;
+
     yield put({ type: robotActionTypes.SHIP_ROBOTS_REQUEST_FAILED, error });
 
     message.error('Failed to ship robots');
@@ -91,15 +99,15 @@ function* watchGetRobotsRequest() {
 }
 
 function* watchProcessRobotsRequest() {
-  yield takeEvery(robotActionTypes.PROCESS_ROBOTS_REQUEST, updateRobots);
+  yield takeEvery(robotActionTypes.PROCESS_ROBOTS_REQUEST, processRobots);
 }
 
 function* watchRecycleRobotsRequest() {
-  yield takeEvery(robotActionTypes.RECYCLE_ROBOTS_REQUEST, deleteRobots);
+  yield takeEvery(robotActionTypes.RECYCLE_ROBOTS_REQUEST, recycleRobots);
 }
 
 function* watchExtinguishFireFromRobotRequest() {
-  yield takeEvery(robotActionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST, extinguishFireRobots);
+  yield takeEvery(robotActionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST, extinguishFireFromRobot);
 }
 
 function* watchShipRobotRequest() {

@@ -8,7 +8,9 @@ const mapStateToProps = (state: any) => {
   return {
     robots: state.robot.robots,
     qaPassedRobots: state.robot.qaPassedRobots,
-    factorySecondsRobots: state.robot.factorySecondsRobots
+    factorySecondsRobots: state.robot.factorySecondsRobots,
+    isLoading: state.robot.isLoading,
+    errors: state.robot.errors
   }
 }
 
