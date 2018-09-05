@@ -6,10 +6,11 @@ import { IRobot } from "../Page"
 
 
 export interface Props extends IRobot {
-  action: any;
+  action?: any;
   process?: string;
   extinguishFire?: any;
 }
+
 
 const TreeNode = Tree.TreeNode;
 
@@ -67,7 +68,7 @@ class Robot extends React.Component<Props> {
             selectable={false}
           />
           <TreeNode
-            title={`hasSentience: ${configuration.numberOfRotors ? configuration.numberOfRotors : "n/a"}`}
+            title={`numOfRotors: ${configuration.numberOfRotors ? configuration.numberOfRotors : "n/a"}`}
             key="0-0-4"
             selectable={false}
           />

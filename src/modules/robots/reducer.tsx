@@ -5,7 +5,7 @@ interface InitialState {
   qaPassedRobots: Array<IRobot>;
   factorySecondsRobots: Array<IRobot>;
   isLoading: boolean;
-  errors: Array<any>;
+  errors: Array<any> | null;
 }
 
 
@@ -45,10 +45,11 @@ export default (state = initialState, action: any) => {
     case actionTypes.RECYCLE_ROBOTS_REQUEST:
     case actionTypes.PROCESS_ROBOTS_REQUEST:
     case actionTypes.EXTINGUISH_ROBOTS_FIRE_REQUEST:
+    case actionTypes.SHIP_ROBOTS_REQUEST:
       return Object.assign(
         {},
         state,
-        { isLoading: true, error: null }
+        { isLoading: true }
       );
 
     case actionTypes.GET_ROBOTS_REQUEST_SUCCESS:
@@ -57,10 +58,10 @@ export default (state = initialState, action: any) => {
         state,
         {
           isLoading: false,
-          error: null,
+          errors: null,
           robots: action.robots.filter((obj: any) => obj.qa_status === null),
           qaPassedRobots: action.robots.filter((obj: any) => obj.qa_status === 'passed_qa'),
-          factorySecondsRobots: action.robots.filter((obj: any) => obj.qa_status === 'factory_seconds')
+          factorySecondsRobots: action.robots.filter((obj: any) => obj.qa_status === 'factory_seconds'),
         }
       );
 
@@ -71,7 +72,7 @@ export default (state = initialState, action: any) => {
         state,
         {
           isLoading: false,
-          error: null,
+          errors: null,
           robots: state.robots.filter((obj) => !robotIds.includes(obj.id)),
           qaPassedRobots: state.qaPassedRobots.concat(action.robots.filter((obj: any) => obj.qa_status === 'passed_qa')),
           factorySecondsRobots: state.factorySecondsRobots.concat(action.robots.filter((obj: any) => obj.qa_status === 'factory_seconds'))
@@ -84,7 +85,7 @@ export default (state = initialState, action: any) => {
         state,
         {
           isLoading: false,
-          error: null,
+          errors: null,
           robots: state.robots.filter((obj) => !action.robotIds.recycleRobots.includes(obj.id))
         }
       );
@@ -95,7 +96,7 @@ export default (state = initialState, action: any) => {
         state,
         {
           isLoading: false,
-          error: null,
+          errors: null,
           robots: state.robots.map((obj) => {
             if (obj.id === action.updatedRobot.id) {
               return action.updatedRobot;
@@ -111,7 +112,7 @@ export default (state = initialState, action: any) => {
         state,
         {
           isLoading: false,
-          error: null,
+          errors: null,
           qaPassedRobots: state.qaPassedRobots.filter((obj) => !action.robotIds.shipRobots.includes(obj.id)),
           factorySecondsRobots: state.factorySecondsRobots.filter((obj) => !action.robotIds.shipRobots.includes(obj.id)),
         }
@@ -127,7 +128,7 @@ export default (state = initialState, action: any) => {
         state,
         {
           isLoading: false,
-          error: action.error
+          errors: action.errors
         }
       );
 
