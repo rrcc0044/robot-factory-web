@@ -3,7 +3,7 @@ import LoadingComponent from '../../common/loader'
 
 const appRoutes = [
   {
-    path: '/dashboard/robots',
+    path: '/',
     component: Loadable({
       loader: () => import('./pages/list/'),
       loading: LoadingComponent,
